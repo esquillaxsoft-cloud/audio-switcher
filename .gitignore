@@ -1,0 +1,28 @@
+## Visual Studio & .NET
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.pidb
+*.booproj
+*.svclog
+
+## JetBrains Rider & VS Code
+.idea/
+.vscode/
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+## Package Directories
+packages/
+*.nupkg
+*.snupkg

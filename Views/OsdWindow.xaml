@@ -1,0 +1,90 @@
+<Window x:Class="AudioSwitcher.Views.OsdWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Audio Switcher OSD"
+        Height="90" Width="380"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        WindowStartupLocation="Manual">
+    
+    <Window.Resources>
+        <Storyboard x:Key="ShowAnimation">
+            <DoubleAnimation Storyboard.TargetName="RootBorder"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.0" To="1.0" Duration="0:0:0.18" />
+            <DoubleAnimation Storyboard.TargetName="TranslateTransform"
+                             Storyboard.TargetProperty="Y"
+                             From="-20" To="0" Duration="0:0:0.22">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Key="HideAnimation">
+            <DoubleAnimation Storyboard.TargetName="RootBorder"
+                             Storyboard.TargetProperty="Opacity"
+                             From="1.0" To="0.0" Duration="0:0:0.25" />
+            <DoubleAnimation Storyboard.TargetName="TranslateTransform"
+                             Storyboard.TargetProperty="Y"
+                             From="0" To="-15" Duration="0:0:0.25">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseIn" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+    </Window.Resources>
+
+    <Border x:Name="RootBorder"
+            Margin="10"
+            CornerRadius="14"
+            Background="#E60F172A"
+            BorderBrush="#38BDF8"
+            BorderThickness="1.5"
+            Effect="{DynamicResource ShadowEffect}">
+        <Border.RenderTransform>
+            <TranslateTransform x:Name="TranslateTransform" Y="-20" />
+        </Border.RenderTransform>
+
+        <Grid Margin="14,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Icon badge -->
+            <Border Grid.Column="0"
+                    Width="44" Height="44"
+                    CornerRadius="10"
+                    Background="#2038BDF8"
+                    BorderBrush="#3038BDF8"
+                    BorderThickness="1"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0">
+                <TextBlock x:Name="TxtIcon"
+                           Text="🔊"
+                           FontSize="22"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </Border>
+
+            <!-- Details -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="AUDIO OUTPUT SWITCHED"
+                           FontSize="10"
+                           FontWeight="SemiBold"
+                           Foreground="#94A3B8" />
+                <TextBlock x:Name="TxtDeviceName"
+                           Text="Desktop Speakers"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Foreground="#F8FAFC"
+                           TextTrimming="CharacterEllipsis"
+                           Margin="0,2,0,0" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
