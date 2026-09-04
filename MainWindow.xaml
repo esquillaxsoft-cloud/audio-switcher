@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="AudioSwitcher"
         Icon="Resources/Icons/app.ico"
-        Height="700" Width="520"
+        Height="720" Width="520"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -305,7 +305,7 @@
                         BorderThickness="1"
                         Padding="16"
                         Visibility="{Binding IsSettingsOpen, Converter={StaticResource BoolToVis}}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,6,16">
                         <StackPanel>
                             <Grid Margin="0,0,0,16">
                                 <TextBlock Text="Application Settings"
@@ -405,7 +405,7 @@
                                     Command="{Binding SaveSettingsCommand}"
                                     Content="Save Settings"
                                     Height="44"
-                                    Margin="0,8,0,0" />
+                                    Margin="0,8,0,8" />
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
