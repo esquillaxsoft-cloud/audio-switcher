@@ -39,7 +39,21 @@ jobs:
           echo "TAG=$tag" >> $env:GITHUB_OUTPUT
           echo "VERSION=$cleanVersion" >> $env:GITHUB_OUTPUT
 
-      - name: Publish Standalone Executable
+      - name: Build Framework-Dependent (~1.8 MB)
+        shell: pwsh
+        run: |
+          $version = "${{ steps.get_version.outputs.VERSION }}"
+          dotnet publish AudioSwitcher.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -p:PublishSingleFile=true `
+            -p:Version=$version `
+            -p:FileVersion=$version.0 `
+            -p:AssemblyVersion=$version.0 `
+            -o ./staging-fdd
+
+      - name: Build Standalone Self-Contained (~71 MB)
         shell: pwsh
         run: |
           $version = "${{ steps.get_version.outputs.VERSION }}"
@@ -53,7 +67,7 @@ jobs:
             -p:Version=$version `
             -p:FileVersion=$version.0 `
             -p:AssemblyVersion=$version.0 `
-            -o ./staging
+            -o ./staging-standalone
 
       - name: Package Release Assets
         shell: pwsh
@@ -61,24 +75,27 @@ jobs:
           $tag = "${{ steps.get_version.outputs.TAG }}"
           New-Item -ItemType Directory -Path ./artifacts -Force | Out-Null
           
-          # Direct single-file executable
-          Copy-Item ./staging/AudioSwitcher.exe ./artifacts/AudioSwitcher.exe -Force
+          function Prepare-Staging($dir) {
+            if (Test-Path ./readme.md) { Copy-Item ./readme.md $dir/ -Force }
+            if (Test-Path ./docs) { Copy-Item ./docs $dir/docs -Recurse -Force }
+            if (Test-Path ./LICENSE) { Copy-Item ./LICENSE $dir/ -Force }
+            Get-ChildItem $dir -Filter "*.pdb" | Remove-Item -Force
+          }
           
-          # Zip package containing executable + readme + docs
-          if (Test-Path ./readme.md) {
-            Copy-Item ./readme.md ./staging/ -Force
-          }
-          if (Test-Path ./docs) {
-            Copy-Item ./docs ./staging/docs -Recurse -Force
-          }
-          if (Test-Path ./LICENSE) {
-            Copy-Item ./LICENSE ./staging/ -Force
-          }
-          Get-ChildItem ./staging -Filter "*.pdb" | Remove-Item -Force
+          # 1. Framework-Dependent
+          Copy-Item ./staging-fdd/AudioSwitcher.exe ./artifacts/AudioSwitcher.exe -Force
+          Prepare-Staging ./staging-fdd
+          $fddZip = "AudioSwitcher-$tag-win-x64.zip"
+          Compress-Archive -Path ./staging-fdd/* -DestinationPath "./artifacts/$fddZip" -Force
           
-          $zipName = "AudioSwitcher-$tag-win-x64.zip"
-          Compress-Archive -Path ./staging/* -DestinationPath "./artifacts/$zipName" -Force
-          Write-Host "Created artifacts/$zipName"
+          # 2. Standalone
+          Copy-Item ./staging-standalone/AudioSwitcher.exe ./artifacts/AudioSwitcher-standalone.exe -Force
+          Prepare-Staging ./staging-standalone
+          $standaloneZip = "AudioSwitcher-$tag-win-x64-standalone.zip"
+          Compress-Archive -Path ./staging-standalone/* -DestinationPath "./artifacts/$standaloneZip" -Force
+          
+          Write-Host "Packaged artifacts:"
+          Get-ChildItem ./artifacts | Format-Table Name, Length
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -90,4 +107,5 @@ jobs:
           generate_release_notes: true
           files: |
             ./artifacts/AudioSwitcher.exe
+            ./artifacts/AudioSwitcher-standalone.exe
             ./artifacts/*.zip

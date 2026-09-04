@@ -4,10 +4,14 @@ A fast, lightweight Windows desktop application (.NET 9 / WPF) designed to elimi
 
 ## 📥 Download
 
-Grab the latest standalone release from the [GitHub Releases](https://github.com/esquillaxsoft-cloud/audio-switcher/releases/latest) page:
+Grab the latest release from the [GitHub Releases](https://github.com/esquillaxsoft-cloud/audio-switcher/releases/latest) page:
 
-- **`AudioSwitcher-v1.0.0-win-x64.zip`**: Portable zip archive (extract and run anywhere).
-- **`AudioSwitcher.exe`**: Direct standalone single-file executable (no installer needed).
+| Edition | File Size | Description |
+| :--- | :--- | :--- |
+| **Standard (Recommended)** | **~1.8 MB** | Super lightweight single-file `.exe`. Requires [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0) (Windows will prompt to install if missing). |
+| **Standalone** | **~71 MB** | Fully self-contained portable `.exe` with zero dependencies. Runs instantly on any 64-bit Windows 10/11 system. |
+
+Both editions are available as direct single-file executables (`AudioSwitcher.exe` / `AudioSwitcher-standalone.exe`) and portable `.zip` archives.
 
 *Runs on 64-bit Windows 10 / 11.*
 

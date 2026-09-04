@@ -23,9 +23,9 @@ Welcome to the **AudioSwitcher** user guide. This document covers everything you
 ## Quick Start
 
 1. **Download & Run**:
-   - Download the latest standalone `AudioSwitcher.exe` or `AudioSwitcher-win-x64.zip` from [GitHub Releases](https://github.com/esquillaxsoft-cloud/audio-switcher/releases/latest).
+   - Download the latest `AudioSwitcher.exe` (~1.8 MB standard, requires .NET 9) or `AudioSwitcher-standalone.exe` (~71 MB standalone, zero dependencies) from [GitHub Releases](https://github.com/esquillaxsoft-cloud/audio-switcher/releases/latest).
    - Place it in a folder of your choice (e.g., `C:\Tools\AudioSwitcher\`).
-   - Double-click `AudioSwitcher.exe` to run. No installation or administrative privileges required.
+   - Double-click to run. No installation or administrative privileges required.
 2. **Select your primary devices**: Check the boxes next to the audio endpoints you want to switch between (e.g. your Headphones and your TV).
 3. **Press the button or hit `Ctrl + Alt + A`**: Audio output changes immediately across Windows!
 
