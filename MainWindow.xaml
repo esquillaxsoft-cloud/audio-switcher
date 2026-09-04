@@ -86,7 +86,7 @@
                         </Button>
 
                         <!-- Close -->
-                        <Button Style="{StaticResource WindowControlButton}"
+                        <Button Style="{StaticResource WindowCloseButton}"
                                 Click="Close_Click"
                                 ToolTip="Close (Minimizes to Tray)">
                             <TextBlock Text="✕" FontSize="12" />
