@@ -3,17 +3,18 @@ using System.IO;
 using System.Text.Json;
 using Microsoft.Win32;
 
-namespace AudioSwitcher.Services.Settings
+namespace Esquillax.AudioSwitcher.Services.Settings
 {
     public class SettingsService
     {
         private static readonly string AppDataFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Esquillax",
             "AudioSwitcher"
         );
         private static readonly string SettingsFilePath = Path.Combine(AppDataFolder, "settings.json");
         private const string StartupRegistryKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-        private const string StartupValueName = "AudioSwitcher";
+        private const string StartupValueName = "EsquillaxAudioSwitcher";
 
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {

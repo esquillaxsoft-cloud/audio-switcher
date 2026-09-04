@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using AudioSwitcher.Models;
+using Esquillax.AudioSwitcher.Models;
 
-namespace AudioSwitcher.Views
+namespace Esquillax.AudioSwitcher.Views
 {
     public partial class OsdWindow : Window
     {

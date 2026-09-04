@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AudioSwitcher.Services.Settings
+namespace Esquillax.AudioSwitcher.Services.Settings
 {
     public class AppSettings
     {

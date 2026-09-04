@@ -5,12 +5,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using AudioSwitcher.Models;
-using AudioSwitcher.Services.Audio;
-using AudioSwitcher.Services.Hotkey;
-using AudioSwitcher.Services.Settings;
+using Esquillax.AudioSwitcher.Models;
+using Esquillax.AudioSwitcher.Services.Audio;
+using Esquillax.AudioSwitcher.Services.Hotkey;
+using Esquillax.AudioSwitcher.Services.Settings;
 
-namespace AudioSwitcher.ViewModels
+namespace Esquillax.AudioSwitcher.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {

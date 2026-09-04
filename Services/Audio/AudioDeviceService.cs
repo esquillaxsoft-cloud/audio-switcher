@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AudioSwitcher.Models;
-using AudioSwitcher.Services.Settings;
+using Esquillax.AudioSwitcher.Models;
+using Esquillax.AudioSwitcher.Services.Settings;
 using NAudio.CoreAudioApi;
 
-namespace AudioSwitcher.Services.Audio
+namespace Esquillax.AudioSwitcher.Services.Audio
 {
     public class AudioDeviceService : IDisposable
     {

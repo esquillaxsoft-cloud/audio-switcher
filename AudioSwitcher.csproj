@@ -8,8 +8,11 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Resources\Icons\app.ico</ApplicationIcon>
-    <RootNamespace>AudioSwitcher</RootNamespace>
+    <RootNamespace>Esquillax.AudioSwitcher</RootNamespace>
     <AssemblyName>AudioSwitcher</AssemblyName>
+    <Company>Esquillax Software</Company>
+    <Product>AudioSwitcher</Product>
+    <Authors>Esquillax Software</Authors>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 

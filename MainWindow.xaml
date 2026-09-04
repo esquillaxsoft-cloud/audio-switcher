@@ -1,9 +1,9 @@
-<Window x:Class="AudioSwitcher.MainWindow"
+<Window x:Class="Esquillax.AudioSwitcher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:models="clr-namespace:AudioSwitcher.Models"
+        xmlns:models="clr-namespace:Esquillax.AudioSwitcher.Models"
         mc:Ignorable="d"
         Title="AudioSwitcher"
         Icon="Resources/Icons/app.ico"
@@ -46,9 +46,9 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <Border Width="28" Height="28"
                                 CornerRadius="8"
-                                Background="{StaticResource PrimaryActionBrush}"
-                                Margin="0,0,10,0">
-                            <TextBlock Text="🔊" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                Margin="0,0,10,0"
+                                ClipToBounds="True">
+                            <Image Source="Resources/Icons/app.ico" Width="28" Height="28" RenderOptions.BitmapScalingMode="HighQuality" />
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="AudioSwitcher"

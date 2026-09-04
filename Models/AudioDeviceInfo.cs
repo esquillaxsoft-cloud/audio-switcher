@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace AudioSwitcher.Models
+namespace Esquillax.AudioSwitcher.Models
 {
     public enum AudioDeviceType
     {
@@ -119,6 +119,7 @@ namespace AudioSwitcher.Models
             _ => "🔈"
         };
 
+        // todo see if something better exists
         private void UpdateDeviceType()
         {
             string lower = _name.ToLowerInvariant();

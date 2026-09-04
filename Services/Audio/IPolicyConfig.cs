@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace AudioSwitcher.Services.Audio
+namespace Esquillax.AudioSwitcher.Services.Audio
 {
     public enum ERole
     {

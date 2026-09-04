@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace AudioSwitcher.Services.Hotkey
+namespace Esquillax.AudioSwitcher.Services.Hotkey
 {
     public class HotkeyManager : IDisposable
     {

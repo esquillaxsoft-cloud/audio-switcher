@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace AudioSwitcher.ViewModels
+namespace Esquillax.AudioSwitcher.ViewModels
 {
     public class RelayCommand : ICommand
     {

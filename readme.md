@@ -23,7 +23,7 @@ A fast, lightweight Windows desktop application (.NET 9 / WPF) designed to elimi
 - **Platform**: Windows 10 / Windows 11 (x64)
 - **Framework**: .NET 9.0 (WPF + WinForms Tray Interop)
 - **Audio Core**: Windows CoreAudio COM Interop (`IPolicyConfig` + `IMMDeviceEnumerator` via `NAudio.Wasapi`)
-- **Settings**: JSON persistence in `%APPDATA%\AudioSwitcher\settings.json`
+- **Settings**: JSON persistence in `%APPDATA%\Esquillax\AudioSwitcher\settings.json`
 
 ---
 
@@ -52,7 +52,7 @@ bin\Release\net9.0-windows\AudioSwitcher.exe
 
 ## ⚙️ Configuration
 
-Settings are saved in `%APPDATA%\AudioSwitcher\settings.json`:
+Settings are saved in `%APPDATA%\Esquillax\AudioSwitcher\settings.json`:
 - `SelectedDeviceIds`: Array of audio endpoint IDs participating in the toggle rotation.
 - `DeviceAliases`: Key-value mapping of device IDs to custom friendly names.
 - `EnableHotkey`: Global shortcut enable/disable (`Ctrl + Alt + A`).

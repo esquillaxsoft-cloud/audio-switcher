@@ -4,18 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using AudioSwitcher.Models;
-using AudioSwitcher.Services.Audio;
-using AudioSwitcher.Services.Hotkey;
-using AudioSwitcher.Services.Settings;
+using Esquillax.AudioSwitcher.Models;
+using Esquillax.AudioSwitcher.Services.Audio;
+using Esquillax.AudioSwitcher.Services.Hotkey;
+using Esquillax.AudioSwitcher.Services.Settings;
 using Forms = System.Windows.Forms;
 using WpfApp = System.Windows.Application;
 
-namespace AudioSwitcher
+namespace Esquillax.AudioSwitcher
 {
     public partial class App : WpfApp
     {
-        private const string AppMutexName = "Global\\AudioSwitcher_SingleInstance_Mutex";
+        private const string AppMutexName = "Global\\Esquillax_AudioSwitcher_SingleInstance_Mutex";
         private Mutex? _mutex;
         private Forms.NotifyIcon? _notifyIcon;
         private SettingsService? _settingsService;
