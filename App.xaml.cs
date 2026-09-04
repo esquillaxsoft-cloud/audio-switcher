@@ -169,6 +169,20 @@ public partial class App : WpfApp
 
         menu.Items.Add(new Forms.ToolStripSeparator());
 
+        // About Esquillax
+        var aboutMenu = new Forms.ToolStripMenuItem("About");
+        aboutMenu.DropDownItems.Add(new Forms.ToolStripMenuItem("🌐 esquillax.com", null, (_, _) =>
+        {
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://esquillax.com") { UseShellExecute = true }); } catch { }
+        }));
+        aboutMenu.DropDownItems.Add(new Forms.ToolStripMenuItem("📂 GitHub Repository", null, (_, _) =>
+        {
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://github.com/esquillaxsoft-cloud/audio-switcher") { UseShellExecute = true }); } catch { }
+        }));
+        menu.Items.Add(aboutMenu);
+
+        menu.Items.Add(new Forms.ToolStripSeparator());
+
         // Exit
         menu.Items.Add(new Forms.ToolStripMenuItem("Exit", null, (_, _) =>
         {

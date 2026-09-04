@@ -28,6 +28,8 @@ public class MainViewModel : INotifyPropertyChanged
 
     public ObservableCollection<AudioDeviceInfo> Devices { get; } = [];
 
+    public string AppVersion { get; } = $"v{typeof(MainViewModel).Assembly.GetName().Version?.ToString(3) ?? "1.0.0"}";
+
     public AppSettings Settings => _settingsService.Current;
 
     public AudioDeviceInfo? CurrentDefaultDevice

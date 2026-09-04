@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:Esquillax.AudioSwitcher.Models"
+        xmlns:viewmodels="clr-namespace:Esquillax.AudioSwitcher.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel, IsDesignTimeCreatable=False}"
         Title="AudioSwitcher"
         Icon="Resources/Icons/app.ico"
         Height="720" Width="520"
@@ -102,6 +104,7 @@
                 <!-- NORMAL VIEW -->
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled"
+                              d:Visibility="Collapsed"
                               Visibility="{Binding IsSettingsOpen, Converter={StaticResource InverseBoolToVis}}">
                     <StackPanel>
                         <!-- HERO TOGGLE CARD -->
@@ -304,110 +307,183 @@
                         BorderBrush="{StaticResource BorderNormal}"
                         BorderThickness="1"
                         Padding="16"
+                        d:Visibility="Visible"
                         Visibility="{Binding IsSettingsOpen, Converter={StaticResource BoolToVis}}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,6,16">
-                        <StackPanel>
-                            <Grid Margin="0,0,0,16">
-                                <TextBlock Text="Application Settings"
-                                           FontSize="16"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource TextPrimary}" />
-                                <Button HorizontalAlignment="Right"
-                                        Style="{StaticResource WindowControlButton}"
-                                        Command="{Binding ToggleSettingsCommand}">
-                                    <TextBlock Text="✕" FontSize="13" />
-                                </Button>
-                            </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" /> <!-- Header -->
+                            <RowDefinition Height="*" />    <!-- Content Cards -->
+                            <RowDefinition Height="Auto" /> <!-- Fixed Save Button -->
+                        </Grid.RowDefinitions>
 
-                            <!-- HOTKEY SETTINGS -->
-                            <Border Background="{StaticResource BgCard}"
-                                    CornerRadius="10"
-                                    BorderBrush="{StaticResource BorderNormal}"
-                                    BorderThickness="1"
-                                    Padding="14"
-                                    Margin="0,0,0,12">
-                                <StackPanel>
-                                    <TextBlock Text="GLOBAL SHORTCUT"
-                                               FontSize="10"
-                                               FontWeight="Bold"
-                                               Foreground="{StaticResource TextMuted}" />
-                                    <CheckBox Content="Enable Global Keyboard Shortcut to Switch"
-                                              IsChecked="{Binding Settings.EnableHotkey, Mode=TwoWay}"
-                                              Style="{StaticResource ModernCheckBox}"
-                                              Margin="0,10,0,8" />
-                                    
-                                    <Grid Margin="0,4,0,0">
+                        <Grid Grid.Row="0" Margin="0,0,0,12">
+                            <TextBlock Text="Application Settings"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimary}" />
+                            <Button HorizontalAlignment="Right"
+                                    Style="{StaticResource WindowControlButton}"
+                                    Command="{Binding ToggleSettingsCommand}">
+                                <TextBlock Text="✕" FontSize="13" />
+                            </Button>
+                        </Grid>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,4,6">
+                            <StackPanel>
+                                <!-- HOTKEY SETTINGS -->
+                                <Border Background="{StaticResource BgCard}"
+                                        CornerRadius="10"
+                                        BorderBrush="{StaticResource BorderNormal}"
+                                        BorderThickness="1"
+                                        Padding="14"
+                                        Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="GLOBAL SHORTCUT"
+                                                   FontSize="10"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource TextMuted}" />
+                                        <CheckBox Content="Enable Global Keyboard Shortcut to Switch"
+                                                  IsChecked="{Binding Settings.EnableHotkey, Mode=TwoWay}"
+                                                  Style="{StaticResource ModernCheckBox}"
+                                                  Margin="0,8,0,6" />
+                                        
+                                        <Grid Margin="0,2,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Current Shortcut:" FontSize="12" Foreground="{StaticResource TextSecondary}" />
+                                                <Border Background="#0F172A"
+                                                        CornerRadius="6"
+                                                        BorderBrush="{StaticResource BorderNormal}"
+                                                        BorderThickness="1"
+                                                        Padding="10,5"
+                                                        Margin="0,4,0,0"
+                                                        HorizontalAlignment="Left">
+                                                    <TextBlock Text="{Binding Settings.HotkeyDisplayText}"
+                                                               FontWeight="Bold"
+                                                               Foreground="{StaticResource AccentCyan}"
+                                                               FontSize="13" />
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- BEHAVIOR & OSD -->
+                                <Border Background="{StaticResource BgCard}"
+                                        CornerRadius="10"
+                                        BorderBrush="{StaticResource BorderNormal}"
+                                        BorderThickness="1"
+                                        Padding="14"
+                                        Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="BEHAVIOR &amp; NOTIFICATIONS"
+                                                   FontSize="10"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource TextMuted}" />
+
+                                        <CheckBox Content="Show On-Screen Floating Banner (OSD) on Switch"
+                                                  IsChecked="{Binding Settings.ShowOsd, Mode=TwoWay}"
+                                                  Style="{StaticResource ModernCheckBox}"
+                                                  Margin="0,8,0,6" />
+
+                                        <CheckBox Content="Start AudioSwitcher with Windows (Minimized)"
+                                                  IsChecked="{Binding Settings.StartWithWindows, Mode=TwoWay}"
+                                                  Style="{StaticResource ModernCheckBox}"
+                                                  Margin="0,3,0,6" />
+
+                                        <CheckBox Content="Minimize window to System Tray"
+                                                  IsChecked="{Binding Settings.MinimizeToTray, Mode=TwoWay}"
+                                                  Style="{StaticResource ModernCheckBox}"
+                                                  Margin="0,3,0,6" />
+
+                                        <CheckBox Content="Closing window minimizes to System Tray"
+                                                  IsChecked="{Binding Settings.CloseToTray, Mode=TwoWay}"
+                                                  Style="{StaticResource ModernCheckBox}"
+                                                  Margin="0,3,0,6" />
+
+                                        <CheckBox Content="Switch Default Communications Device along with Multimedia"
+                                                  IsChecked="{Binding Settings.SwitchCommunicationsDevice, Mode=TwoWay}"
+                                                  Style="{StaticResource ModernCheckBox}"
+                                                  Margin="0,3,0,2" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- ABOUT & LINKS CARD -->
+                                <Border Background="{StaticResource BgCard}"
+                                        CornerRadius="10"
+                                        BorderBrush="{StaticResource BorderNormal}"
+                                        BorderThickness="1"
+                                        Padding="14"
+                                        Margin="0,0,0,4">
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <StackPanel Grid.Column="0">
-                                            <TextBlock Text="Current Shortcut:" FontSize="12" Foreground="{StaticResource TextSecondary}" />
-                                            <Border Background="#0F172A"
-                                                    CornerRadius="6"
-                                                    BorderBrush="{StaticResource BorderNormal}"
-                                                    BorderThickness="1"
-                                                    Padding="10,6"
-                                                    Margin="0,4,0,0"
-                                                    HorizontalAlignment="Left">
-                                                <TextBlock Text="{Binding Settings.HotkeyDisplayText}"
+
+                                        <Image Source="Resources/Icons/app.png"
+                                               Width="38" Height="38"
+                                               Margin="0,0,14,0"
+                                               VerticalAlignment="Center"
+                                               RenderOptions.BitmapScalingMode="HighQuality" />
+
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                                <TextBlock Text="AudioSwitcher"
+                                                           FontSize="13"
                                                            FontWeight="Bold"
+                                                           Foreground="{StaticResource TextPrimary}" />
+                                                <TextBlock Text="{Binding AppVersion, StringFormat=' {0}'}"
+                                                           FontSize="11"
+                                                           FontWeight="SemiBold"
                                                            Foreground="{StaticResource AccentCyan}"
-                                                           FontSize="13" />
-                                            </Border>
+                                                           Margin="6,1,0,0" />
+                                            </StackPanel>
+
+                                            <TextBlock Text="Crafted by Esquillax Software • MIT License"
+                                                       FontSize="11"
+                                                       Foreground="{StaticResource TextMuted}"
+                                                       Margin="0,0,0,6" />
+
+                                            <!-- Links: Website & GitHub -->
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock FontSize="11">
+                                                    <Hyperlink NavigateUri="https://esquillax.com"
+                                                               RequestNavigate="Hyperlink_RequestNavigate"
+                                                               Foreground="{StaticResource AccentCyan}"
+                                                               TextDecorations="{x:Null}">
+                                                        🌐 esquillax.com
+                                                    </Hyperlink>
+                                                </TextBlock>
+
+                                                <TextBlock Text=" • " FontSize="11" Foreground="{StaticResource TextMuted}" Margin="8,0,8,0" />
+
+                                                <TextBlock FontSize="11">
+                                                    <Hyperlink NavigateUri="https://github.com/esquillaxsoft-cloud/audio-switcher"
+                                                               RequestNavigate="Hyperlink_RequestNavigate"
+                                                               Foreground="{StaticResource AccentCyan}"
+                                                               TextDecorations="{x:Null}">
+                                                        📂 GitHub Repo
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </StackPanel>
                                         </StackPanel>
                                     </Grid>
-                                </StackPanel>
-                            </Border>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
 
-                            <!-- BEHAVIOR & OSD -->
-                            <Border Background="{StaticResource BgCard}"
-                                    CornerRadius="10"
-                                    BorderBrush="{StaticResource BorderNormal}"
-                                    BorderThickness="1"
-                                    Padding="14"
-                                    Margin="0,0,0,12">
-                                <StackPanel>
-                                    <TextBlock Text="BEHAVIOR &amp; NOTIFICATIONS"
-                                               FontSize="10"
-                                               FontWeight="Bold"
-                                               Foreground="{StaticResource TextMuted}" />
-
-                                    <CheckBox Content="Show On-Screen Floating Banner (OSD) on Switch"
-                                              IsChecked="{Binding Settings.ShowOsd, Mode=TwoWay}"
-                                              Style="{StaticResource ModernCheckBox}"
-                                              Margin="0,12,0,8" />
-
-                                    <CheckBox Content="Start AudioSwitcher with Windows (Minimized)"
-                                              IsChecked="{Binding Settings.StartWithWindows, Mode=TwoWay}"
-                                              Style="{StaticResource ModernCheckBox}"
-                                              Margin="0,4,0,8" />
-
-                                    <CheckBox Content="Minimize window to System Tray"
-                                              IsChecked="{Binding Settings.MinimizeToTray, Mode=TwoWay}"
-                                              Style="{StaticResource ModernCheckBox}"
-                                              Margin="0,4,0,8" />
-
-                                    <CheckBox Content="Closing window minimizes to System Tray"
-                                              IsChecked="{Binding Settings.CloseToTray, Mode=TwoWay}"
-                                              Style="{StaticResource ModernCheckBox}"
-                                              Margin="0,4,0,8" />
-
-                                    <CheckBox Content="Switch Default Communications Device along with Multimedia"
-                                              IsChecked="{Binding Settings.SwitchCommunicationsDevice, Mode=TwoWay}"
-                                              Style="{StaticResource ModernCheckBox}"
-                                              Margin="0,4,0,4" />
-                                </StackPanel>
-                            </Border>
-
-                            <!-- SAVE BUTTON -->
-                            <Button Style="{StaticResource HeroActionButton}"
-                                    Command="{Binding SaveSettingsCommand}"
-                                    Content="Save Settings"
-                                    Height="44"
-                                    Margin="0,8,0,8" />
-                        </StackPanel>
-                    </ScrollViewer>
+                        <!-- FIXED SAVE BUTTON -->
+                        <Button Grid.Row="2"
+                                Style="{StaticResource HeroActionButton}"
+                                Command="{Binding SaveSettingsCommand}"
+                                Content="Save Settings"
+                                Height="48"
+                                Margin="0,10,0,0" />
+                    </Grid>
                 </Border>
 
                 <!-- ================= ALIAS EDIT POPUP ================= -->

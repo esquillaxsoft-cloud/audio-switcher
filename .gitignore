@@ -27,3 +27,8 @@ $RECYCLE.BIN/
 packages/
 *.nupkg
 *.snupkg
+
+## Release Outputs
+dist/
+staging/
+artifacts/

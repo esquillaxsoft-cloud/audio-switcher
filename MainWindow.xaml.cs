@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Navigation;
 using Esquillax.AudioSwitcher.Models;
 using Esquillax.AudioSwitcher.Services.Audio;
 using Esquillax.AudioSwitcher.Services.Hotkey;
@@ -121,5 +123,18 @@ public partial class MainWindow : Window
         }
         Activate();
         Focus();
+    }
+
+    private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[MainWindow] Failed to open URL: {ex.Message}");
+        }
+        e.Handled = true;
     }
 }

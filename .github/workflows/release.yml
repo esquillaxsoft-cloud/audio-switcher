@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release Tag (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Extract Version
+        id: get_version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.event.inputs.tag_name || github.ref_name }}"
+          $cleanVersion = $tag.TrimStart('v')
+          Write-Host "Tag: $tag, Version: $cleanVersion"
+          echo "TAG=$tag" >> $env:GITHUB_OUTPUT
+          echo "VERSION=$cleanVersion" >> $env:GITHUB_OUTPUT
+
+      - name: Publish Standalone Executable
+        shell: pwsh
+        run: |
+          $version = "${{ steps.get_version.outputs.VERSION }}"
+          dotnet publish AudioSwitcher.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:Version=$version `
+            -p:FileVersion=$version.0 `
+            -p:AssemblyVersion=$version.0 `
+            -o ./staging
+
+      - name: Package Release Assets
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.get_version.outputs.TAG }}"
+          New-Item -ItemType Directory -Path ./artifacts -Force | Out-Null
+          
+          # Direct single-file executable
+          Copy-Item ./staging/AudioSwitcher.exe ./artifacts/AudioSwitcher.exe -Force
+          
+          # Zip package containing executable + readme + docs
+          if (Test-Path ./readme.md) {
+            Copy-Item ./readme.md ./staging/ -Force
+          }
+          if (Test-Path ./docs) {
+            Copy-Item ./docs ./staging/docs -Recurse -Force
+          }
+          if (Test-Path ./LICENSE) {
+            Copy-Item ./LICENSE ./staging/ -Force
+          }
+          Get-ChildItem ./staging -Filter "*.pdb" | Remove-Item -Force
+          
+          $zipName = "AudioSwitcher-$tag-win-x64.zip"
+          Compress-Archive -Path ./staging/* -DestinationPath "./artifacts/$zipName" -Force
+          Write-Host "Created artifacts/$zipName"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.TAG }}
+          name: AudioSwitcher ${{ steps.get_version.outputs.TAG }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ./artifacts/AudioSwitcher.exe
+            ./artifacts/*.zip

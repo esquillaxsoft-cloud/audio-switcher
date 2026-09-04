@@ -13,6 +13,13 @@
     <Company>Esquillax Software</Company>
     <Product>AudioSwitcher</Product>
     <Authors>Esquillax Software</Authors>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Description>Fast, modern Windows audio output switcher with global hotkey and tray integration.</Description>
+    <Copyright>Copyright © 2025-2026 Esquillax Software</Copyright>
+    <RepositoryUrl>https://github.com/esquillaxsoft-cloud/audio-switcher</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
