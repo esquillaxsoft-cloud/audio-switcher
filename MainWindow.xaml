@@ -44,12 +44,11 @@
 
                     <!-- App Title & Icon -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Width="28" Height="28"
-                                CornerRadius="8"
-                                Margin="0,0,10,0"
-                                ClipToBounds="True">
-                            <Image Source="Resources/Icons/app.ico" Width="28" Height="28" RenderOptions.BitmapScalingMode="HighQuality" />
-                        </Border>
+                        <Image Source="Resources/Icons/app.png"
+                               Width="36" Height="36"
+                               Margin="0,0,12,0"
+                               VerticalAlignment="Center"
+                               RenderOptions.BitmapScalingMode="HighQuality" />
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="AudioSwitcher"
                                        FontSize="15"

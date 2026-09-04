@@ -10,117 +10,116 @@ using Esquillax.AudioSwitcher.Services.Settings;
 using Esquillax.AudioSwitcher.ViewModels;
 using Esquillax.AudioSwitcher.Views;
 
-namespace Esquillax.AudioSwitcher
+namespace Esquillax.AudioSwitcher;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    private readonly MainViewModel _viewModel;
+    private readonly SettingsService _settingsService;
+    private readonly HotkeyManager _hotkeyManager;
+    private readonly OsdWindow _osdWindow;
+    private bool _isExplicitExit;
+
+    public MainViewModel ViewModel => _viewModel;
+
+    public MainWindow(
+        AudioDeviceService audioService,
+        SettingsService settingsService,
+        HotkeyManager hotkeyManager)
     {
-        private readonly MainViewModel _viewModel;
-        private readonly SettingsService _settingsService;
-        private readonly HotkeyManager _hotkeyManager;
-        private readonly OsdWindow _osdWindow;
-        private bool _isExplicitExit;
+        InitializeComponent();
 
-        public MainViewModel ViewModel => _viewModel;
+        _settingsService = settingsService;
+        _hotkeyManager = hotkeyManager;
+        _osdWindow = new();
 
-        public MainWindow(
-            AudioDeviceService audioService,
-            SettingsService settingsService,
-            HotkeyManager hotkeyManager)
+        _viewModel = new(audioService, settingsService, hotkeyManager);
+        _viewModel.DeviceSwitched += OnDeviceSwitched;
+        DataContext = _viewModel;
+
+        Loaded += OnLoaded;
+        Closing += OnClosing;
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        var hwnd = new WindowInteropHelper(this).Handle;
+        _hotkeyManager.Initialize(hwnd);
+        _viewModel.ReconfigureHotkey();
+    }
+
+    private void OnDeviceSwitched(AudioDeviceInfo device)
+    {
+        if (_settingsService.Current.ShowOsd)
         {
-            InitializeComponent();
-
-            _settingsService = settingsService;
-            _hotkeyManager = hotkeyManager;
-            _osdWindow = new OsdWindow();
-
-            _viewModel = new MainViewModel(audioService, settingsService, hotkeyManager);
-            _viewModel.DeviceSwitched += OnDeviceSwitched;
-            DataContext = _viewModel;
-
-            Loaded += OnLoaded;
-            Closing += OnClosing;
+            Dispatcher.Invoke(() =>
+            {
+                _osdWindow.ShowDevice(device, _settingsService.Current.OsdDurationMs);
+            });
         }
+    }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+    private void Header_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left)
         {
-            var hwnd = new WindowInteropHelper(this).Handle;
-            _hotkeyManager.Initialize(hwnd);
-            _viewModel.ReconfigureHotkey();
+            DragMove();
         }
+    }
 
-        private void OnDeviceSwitched(AudioDeviceInfo device)
+    private void Minimize_Click(object sender, RoutedEventArgs e)
+    {
+        if (_settingsService.Current.MinimizeToTray)
         {
-            if (_settingsService.Current.ShowOsd)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    _osdWindow.ShowDevice(device, _settingsService.Current.OsdDurationMs);
-                });
-            }
+            Hide();
         }
-
-        private void Header_MouseDown(object sender, MouseButtonEventArgs e)
+        else
         {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                DragMove();
-            }
+            WindowState = WindowState.Minimized;
         }
+    }
 
-        private void Minimize_Click(object sender, RoutedEventArgs e)
+    private void Close_Click(object sender, RoutedEventArgs e)
+    {
+        if (_settingsService.Current.CloseToTray)
         {
-            if (_settingsService.Current.MinimizeToTray)
-            {
-                Hide();
-            }
-            else
-            {
-                WindowState = WindowState.Minimized;
-            }
+            Hide();
         }
-
-        private void Close_Click(object sender, RoutedEventArgs e)
+        else
         {
-            if (_settingsService.Current.CloseToTray)
-            {
-                Hide();
-            }
-            else
-            {
-                ExitApplication();
-            }
+            ExitApplication();
         }
+    }
 
-        private void OnClosing(object? sender, CancelEventArgs e)
+    private void OnClosing(object? sender, CancelEventArgs e)
+    {
+        if (!_isExplicitExit && _settingsService.Current.CloseToTray)
         {
-            if (!_isExplicitExit && _settingsService.Current.CloseToTray)
-            {
-                e.Cancel = true;
-                Hide();
-            }
-            else
-            {
-                _osdWindow.Close();
-            }
+            e.Cancel = true;
+            Hide();
         }
-
-        public void ExitApplication()
+        else
         {
-            _isExplicitExit = true;
             _osdWindow.Close();
-            Close();
-            System.Windows.Application.Current.Shutdown();
         }
+    }
 
-        public void ShowAndRestore()
+    public void ExitApplication()
+    {
+        _isExplicitExit = true;
+        _osdWindow.Close();
+        Close();
+        System.Windows.Application.Current.Shutdown();
+    }
+
+    public void ShowAndRestore()
+    {
+        Show();
+        if (WindowState == WindowState.Minimized)
         {
-            Show();
-            if (WindowState == WindowState.Minimized)
-            {
-                WindowState = WindowState.Normal;
-            }
-            Activate();
-            Focus();
+            WindowState = WindowState.Normal;
         }
+        Activate();
+        Focus();
     }
 }
