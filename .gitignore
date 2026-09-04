@@ -11,6 +11,7 @@
 *.pidb
 *.booproj
 *.svclog
+*_wpftmp.csproj
 
 ## JetBrains Rider & VS Code
 .idea/
